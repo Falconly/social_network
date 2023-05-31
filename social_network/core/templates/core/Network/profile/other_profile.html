@@ -1,0 +1,140 @@
+{% extends 'core/Network/profile/base_pr.html' %}
+
+
+{% block content %}
+<div class="row">
+
+		<!-- col col-xl-4 col-lg-4 col-md-7 col-sm-12 col-12 -->
+		<div class="block-img-ava">
+			<img src="{{ profile.get_avatar }}" class="img-fluid img-list">
+		
+		
+	<!-- Button trigger modal -->
+
+{% if not are_friends %}
+	{% if request_rejected %}
+				<div class="btn-group w-100">
+				  <button type="button" class="btn btn-info my-3 w-100">Ваша заявка была отклонена</button>
+				  <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split my-3" data-bs-toggle="dropdown" aria-expanded="false">
+				  <span class="visually-hidden">Toggle Dropdown</span>
+				  </button>
+				  	<ul class="dropdown-menu">
+				    <li><a class="dropdown-item" href="{% url 'core:repeat_request' profile.slug %}">Отправить повторно</a></li>
+				    <li><a class="dropdown-item" href="{% url 'core:request_delete' profile.slug %}">Отменить заявку</a></li>
+		  		</ul>
+  			</div>
+	{% elif friend_request %}
+		<div class="btn-group w-100">
+		  <button type="button" class="btn btn-info my-3 w-100">Заявка отправлена</button>
+		  <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split my-3" data-bs-toggle="dropdown" aria-expanded="false">
+		  <span class="visually-hidden">Toggle Dropdown</span>
+		  </button>
+		  	<ul class="dropdown-menu">
+    		<li><a class="dropdown-item" href="{% url 'core:request_delete' profile.slug %}">Отменить заявку</a></li>
+  		</ul>
+
+		</div>
+	{% elif reject %}
+		<div class="btn-group w-100">
+				  <button type="button" class="btn btn-info my-3 w-100">Вы отклонили заявку</button>
+				  <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split my-3" data-bs-toggle="dropdown" aria-expanded="false">
+				  <span class="visually-hidden">Toggle Dropdown</span>
+				  </button>
+				  	<ul class="dropdown-menu">
+		    		<li><a class="dropdown-item" href="{% url 'core:accept_friend' profile.slug %}">Принять</a></li>
+		  		</ul>
+  			</div>
+
+	{% elif reverse_request %}
+			<div class="btn-group w-100">
+		  <button type="button" class="btn btn-info my-3 w-100">Вам отправлена заявка в друзья</button>
+		  <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split my-3" data-bs-toggle="dropdown" aria-expanded="false">
+		  <span class="visually-hidden">Toggle Dropdown</span>
+		  </button>
+		  	<ul class="dropdown-menu">
+    		<li><a class="dropdown-item" href="{% url 'core:accept_friend' profile.slug %}">Принять</a></li>
+    		<li><a class="dropdown-item" href="{% url 'core:reject_friend' profile.slug %}">Отклонить</a></li>
+  		</ul>
+  			</div>
+
+	{% else %}
+		<div class="btn-group w-100">
+		  <a type="button" class="upload_ava btn w-100 my-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Отправить заявку в друзья</a>
+		  <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split my-3" data-bs-toggle="dropdown" aria-expanded="false">
+		  <span class="visually-hidden">Toggle Dropdown</span>
+		  </button>
+		  	<ul class="dropdown-menu">
+	    		<li><a class="dropdown-item" href="{% url 'core:block_user' profile.slug %}">Заблокировать</a></li>
+  			</ul>
+  		</div>
+
+<!-- 		<a type="button" class="upload_ava btn w-100 my-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+	  Отправить заявку в друзья
+	</a>
+ -->
+	<!-- Modal -->
+	<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h1 class="modal-title fs-5" id="staticBackdropLabel">Заявка в друзья</h1>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        Вы действительно хотите отправить заявку в друзья?
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+	        <a href="{% url 'core:following' profile.slug %}" type="button" class="btn btn-primary">Отправить</a>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	{% endif %}
+
+{% else %}
+	<div class="btn-group w-100">
+  <button type="button" class="btn btn-info my-3 w-100">У вас в друзьях</button>
+  <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split my-3" data-bs-toggle="dropdown" aria-expanded="false">
+    <span class="visually-hidden">Toggle Dropdown</span>
+  </button>
+  <ul class="dropdown-menu">
+    <li><a class="dropdown-item" href="{% url 'core:delete_friend' profile.slug %}">Удалить из друзей</a></li>
+  </ul>
+</div>
+
+{% endif %}
+</div>
+
+
+	<div class="col col-xl-4 col-lg-5 col-md-5 col-12 pt-1">
+					<ul class="list-group list-group-flush d-flex">
+							{% if profile.user.first_name %}
+							<li class="list-group-item">Имя: {{profile.user.first_name}}</li>
+							{% else %}
+							<li class="list-group-item">Имя: не указано</li>
+							{% endif %}
+							{% if profile.user.last_name %}
+					 		<li class="list-group-item">Фамилия: {{ profile.user.last_name }}</li>
+					 		{% else %}
+					 		<li class="list-group-item">Фамилия: не указана</li>
+					 		{% endif %}
+					 		{% if profile.get_age %}
+							<li class="list-group-item">Возраст: {{ profile.get_age }}</li>
+							<li class="list-group-item">Дата рождения: {{ profile.date_birthday }}</li>
+							{% else %}
+							<li class="list-group-item">Возраст: не указан</li>
+							<li class="list-group-item">Дата рождения: не указано</li>
+							{% endif %}
+							{% if profile.bio %}
+							<li class="list-group-item">Краткая информация о себе: {{ profile.bio|truncatechars:10 }}</li>
+							{% else %}
+							<li class="list-group-item">Краткая информация о себе: отсутствует</li>
+							{% endif %}
+							<li class="list-group-item">Дата создания: {{ profile.user.date_joined }}</li>
+
+					</ul>
+				
+	</div>
+</div>
+{% endblock %}

@@ -1,0 +1,37 @@
+{% extends 'core/Network/friends/base_friends.html' %}
+
+
+{% block main %}
+	{% for friend_request in friend_requests %}
+	{% if not friend_request.rejected %}
+		<div class="container bg-white py-1 border-bottom">
+			<div class="row">
+					<div class="col col-3 col-xl-1 col-sm-3 p-0">
+						<div class="block-img">
+							<img src="{{friend_request.from_user.profile.get_avatar}}" class="img-list img-fluid rounded-circle">
+						</div>
+					</div>
+					<div class="col d-flex justify-content-start h-25">
+
+									<a class="user-link nav-link" href="{{ friend_request.from_user.profile.get_absolute_url }}">{{ friend_request.from_user.first_name|truncatechars:10 }} {{ friend_request.from_user.last_name|truncatechars:10 }} </a>
+					</div>
+
+					<div class="col col-1 d-flex justify-content-end">
+				            <div class="dropdown">
+								  <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+				                  	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+									<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"></path>
+									</svg>
+								  </button>
+								  <ul class="dropdown-menu">
+								    <li><a class="dropdown-item" href="{% url 'core:accept_friend' friend_request.from_user.profile.slug %}">Принять заявку</a></li>
+								    <li><a class="dropdown-item" href="{% url 'core:reject_friend' friend_request.from_user.profile.slug %}">Отклонить заявку</a></li>
+								  </ul>
+							</div>
+					</div>
+				</div>
+			</div>
+
+	{% endif %}
+	{% endfor %}
+{% endblock %}

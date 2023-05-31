@@ -1,0 +1,118 @@
+.nav-pills li a:hover {
+	background-color: blue;
+}
+
+a.upload_ava:hover {
+	background-color: blue;
+	color: white;
+}
+
+.content {
+	background-color: #CFD8DC;
+	color: #212529;
+	font-family: -apple-system, BlinkMacSystemFont, Arial, sans-serif;
+}
+
+a.upload_ava {
+	background-color: #1a1a1a;
+	color: white;
+}
+
+
+.btn-warning{
+  position: relative;
+  padding: 11px 16px;
+  font-size: 15px;
+  line-height: 1.5;
+  border-radius: 3px;
+  color: #fff;
+  background-color: #1a1a1a;
+  border: 0;
+  transition: 0.2s;
+  overflow: hidden; \\ L
+}
+
+.btn-warning input[type = "file"]{
+  cursor: pointer;
+  position: absolute;
+  left: 0%;
+  top: 0%;
+  transform: scale(3);
+  opacity: 0;
+}
+
+.btn-warning:hover{
+  background-color: blue;
+  color: white;
+}
+
+.form-error li{
+  list-style-type: none;
+  color: red;
+}
+
+.hr-side {
+	display: block;
+	color: white;
+	border: 1px solid white;
+	box-sizing: border-box;
+}
+
+li.list-users{
+	height: 5vw;
+}
+
+.block-img {
+	width:100px;
+	height:100px;
+}
+
+.block-img-profile {
+	width:30px;
+	height:30px;
+}
+
+.block-img-ava {
+	width:300px;
+	height: 300px;
+}
+
+.block-img-people {
+	width:50px;
+	height:50px;
+}
+
+.img-list {
+	object-fit: cover;
+	width:100%;
+	height:100%;
+
+}
+
+.img-profile {
+	float:left;
+}
+
+.user-link {
+	font-size: 18px;
+	font-weight: bold;
+}
+
+.user-link:hover {
+	color: blue;
+}
+
+.container-img-ava {
+	width: 350px;
+	height: 350px;
+	margin:0;
+	padding:0;
+}
+
+
+@media (min-width:0px) and (max-width:600px){
+	.block-img{
+		width:50px;
+		height:50px;
+	}
+}

@@ -1,0 +1,43 @@
+{% extends 'core/Network/profile/base_pr.html' %}
+{% load static %}
+
+{% block content %}
+	<div class="row">
+				<!-- <div class="col col-xl-4 col-lg-4 col-md-7 col-sm-12 col-12"> -->
+					<div class="block-img-ava">
+						<img src="{{ profile.get_avatar }}" class="img-fluid img-list">
+					</div>
+				<!-- </div> -->
+				<div class="col col-xl-4 col-lg-5 col-md-5 col-12 pt-1">
+					<ul class="list-group list-group-flush d-flex">
+							{% if user.first_name %}
+							<li class="list-group-item">Имя: {{user.first_name}}</li>
+							{% else %}
+							<li class="list-group-item">Имя: не указано</li>
+							{% endif %}
+							{% if user.last_name %}
+					 		<li class="list-group-item">Фамилия: {{ user.last_name }}</li>
+					 		{% else %}
+					 		<li class="list-group-item">Фамилия: не указана</li>
+					 		{% endif %}
+					 		{% if profile.get_age %}
+							<li class="list-group-item">Возраст: {{ profile.get_age }}</li>
+							<li class="list-group-item">Дата рождения: {{ profile.date_birthday }}
+							</li>
+							{% else %}
+							<li class="list-group-item">Возраст: не указан</li>
+							<li class="list-group-item">Дата рождения: не указана							</li>
+							{% endif %}
+							{% if profile.bio %}
+							<li class="list-group-item">Краткая информация о себе: {{ profile.bio|truncatechars:10 }}</li>
+							{% else %}
+							<li class="list-group-item">Краткая информация о себе: отсутствует</li>
+							{% endif %}
+							<li class="list-group-item">Дата создания: {{ user.date_joined }}</li>
+
+					</ul>
+					<a href="{% url 'core:update_profile' slug %}" class="upload_ava btn w-100 my-3">Редактировать профиль</a>
+				</div>
+</div>
+
+{% endblock %}

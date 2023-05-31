@@ -1,0 +1,6 @@
+{% extends 'core/Auth/base_auth.html' %}
+
+{% block button %}
+<button class="w-100 btn btn-lg btn-primary" type="submit">Войти</button>
+<a href="{% url 'core:register' %}">Зарегистрироваться</a>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends 'core/Network/friends/base_friends.html' %}
+
+{% block main %}
+{% for f in rejected_requests %}
+{% if f.rejected %}
+<div class="container bg-white py-1 border-bottom">
+										<div class="row">
+								<div class="col col-3 col-xl-1 col-sm-3 p-0">
+									<div class="block-img">
+										<img src="{{f.to_user.profile.get_avatar}}" class="img-list img-fluid rounded-circle">
+									</div>
+								</div>
+	
+								<div class="col d-flex justify-content-start h-25">
+
+									<a class="user-link nav-link" href="{{ f.to_user.profile.get_absolute_url }}">{{ f.to_user|truncatechars:10 }}</a>
+								</div>
+								<div class="col col-1 d-flex justify-content-end">
+						            <div class="dropdown">
+									  <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+					                  	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+										<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"></path>
+										</svg>
+									  </button>
+									  <ul class="dropdown-menu">
+									    <li><a class="dropdown-item" href="{% url 'core:repeat_request' f.to_user.profile.slug %}">Отправить повторно</a></li>
+									  </ul>
+									</div>
+								</div>
+							</div>
+						</div>
+{% endif %}
+{% endfor %}
+{% endblock %}
