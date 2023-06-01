@@ -1,5 +1,5 @@
 from django.contrib import admin
-from friendship.admin import FriendshipRequestAdmin
+from friendship.admin import FriendshipRequestAdmin, FriendAdmin
 
 from core import models
 

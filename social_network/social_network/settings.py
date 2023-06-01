@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'core.apps.CoreAppConfig',
+    'posts.apps.PostsConfig',
     'debug_toolbar',
     'friendship',
 

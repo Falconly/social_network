@@ -12,7 +12,7 @@ from friendship.models import Friend, FriendshipRequest
 class Profile(models.Model):
     user = models.OneToOneField(get_user_model(), verbose_name="Профиль пользователя", on_delete=models.CASCADE)
     slug = models.SlugField("Персональная ссылка", unique=True, blank=True, max_length=255)
-    bio = models.TextField("Информация о себе", max_length=500, blank=True, null=True)
+    bio = models.TextField("Информация о себе", max_length=255, blank=True, null=True)
     avatar = models.ImageField(
         "Аватар пользователя",
         blank=True,
