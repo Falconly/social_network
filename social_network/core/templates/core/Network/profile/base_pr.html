@@ -22,23 +22,23 @@
 				</a>
 				<ul class="nav nav-pills flex-column mt-4">
 						<li class="nav-item py-2 py-sm-0">
-						<a href="#" class="nav-link text-white">
-							<i class="fs-5 fa fa-house"></i><span class="fs-4 ms-3 d-none d-sm-inline">Лента</span>
+						<a href="{% url 'core:profile' request.user.profile.slug %}" class="nav-link text-white">
+							<i class="fs-5 fa fa-house"></i><span class="fs-4 ms-3 d-none d-sm-inline">Моя страница</span>
+						</a>
+					</li>
+						<li class="nav-item py-2 py-sm-0">
+						<a href="" class="nav-link text-white">
+							<i class="fs-5 fa fa-newspaper"></i><span class="fs-4 ms-3 d-none d-sm-inline">Лента</span>
 						</a>
 					</li>
 					<li class="nav-item py-2 py-sm-0">
 						<a href="{% url 'core:friends' request.user.profile.slug %}" class="nav-link text-white">
-							<i class="fs-5 fa fa-users"></i><span class="fs-4 ms-3 d-none d-sm-inline">Друзья</span>
+							<i class="fs-5 fa fa-people-pulling"></i><span class="fs-4 ms-3 d-none d-sm-inline">Друзья</span>
 						</a>
 					</li>
 					<li class="nav-item py-2 py-sm-0">
 						<a href="{% url 'core:peoples' %}" class="nav-link text-white">
 							<i class="fs-5 fa fa-users"></i><span class="fs-4 ms-3 d-none d-sm-inline">Люди</span>
-						</a>
-					</li>
-					<li class="nav-item py-2 py-sm-0">
-						<a href="#" class="nav-link text-white">
-							<i class="fs-5 fa fa-users"></i><span class="fs-4 ms-3 d-none d-sm-inline">Customer</span>
 						</a>
 					</li>
 				</ul>
@@ -67,14 +67,7 @@
 		<div class="content p-3 col">
 			
 		{% block content %}
-		{% endblock %}
-		<div class="container-fluid">
-			<div class="row">
-				<div class="col">
-					spojkfkoisj
-				</div>
-			</div>
-		</div>
+		{% endblock %}  
 			</div>
 		
 	</div>	

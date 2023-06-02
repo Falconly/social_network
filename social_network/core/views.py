@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -6,12 +7,16 @@ from django.db import transaction
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, DetailView, UpdateView, ListView
+from django.views.generic.edit import FormMixin
 
 from friendship.models import Friend, Block, FriendshipRequest
 
 from core import forms
 from core import models
 from core import services
+
+from posts.forms import PostForm
+from posts.models import Posts
 
 
 # Create your views here.
@@ -36,11 +41,12 @@ class LoginUserView(LoginView):
         return reverse('core:profile', kwargs={'profile_slug': self.request.user.profile.slug})
 
 
-class ProfileView(LoginRequiredMixin, DetailView):
+class ProfileView(LoginRequiredMixin, FormMixin, DetailView):
     model = models.Profile
     template_name = None
     slug_url_kwarg = 'profile_slug'
     context_object_name = 'user'
+    form_class = PostForm
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
@@ -51,10 +57,12 @@ class ProfileView(LoginRequiredMixin, DetailView):
         context = super().get_context_data(**kwargs)
         slug = self.user.profile.slug
 
-        if self.template_name == 'core/Network/profile.html':
+        if self.template_name == 'core/Network/profile/profile.html':
+            posts = Posts.objects.posts(self.user)
             c_def = {'title': f'{self.user.first_name} {self.user.last_name}', 'profile': self.user.profile,
-                     'slug': slug}
+                     'slug': slug, 'posts': posts}
         else:
+            posts = Posts.objects.posts(self.other_user.user)
             reverse_request = services.get_reverse_friend_request(self.user, self.other_user.user)
             if reverse_request:
                 if reverse_request.rejected:
@@ -72,7 +80,7 @@ class ProfileView(LoginRequiredMixin, DetailView):
                     if services.check_are_friends(self.user, self.other_user.user):
                         context.update({'are_friends': True})
             c_def = {'title': f'{self.other_user.user.first_name} {self.other_user.user.last_name}',
-                     'profile': self.other_user, 'slug': slug}
+                     'profile': self.other_user, 'slug': slug, 'posts': posts}
         context.update(c_def)
         return context
 
@@ -82,6 +90,23 @@ class ProfileView(LoginRequiredMixin, DetailView):
         else:
             self.template_name = 'core/Network/profile/other_profile.html'
         return self.user
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form = form.save(commit=False)
+        form.user = self.user
+        form.profile = self.user.profile
+        form.save()
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('core:profile', kwargs={'profile_slug': self.kwargs['profile_slug']})
 
 
 class UpdateProfileView(LoginRequiredMixin, UpdateView):

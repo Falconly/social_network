@@ -5,15 +5,15 @@
 <div class="row">
 
 		<!-- col col-xl-4 col-lg-4 col-md-7 col-sm-12 col-12 -->
+		<div class="block">
 		<div class="block-img-ava">
 			<img src="{{ profile.get_avatar }}" class="img-fluid img-list">
-		
-		
-	<!-- Button trigger modal -->
 
+	<!-- Button trigger modal -->
+<div class="btn-group w-100">
 {% if not are_friends %}
 	{% if request_rejected %}
-				<div class="btn-group w-100">
+
 				  <button type="button" class="btn btn-info my-3 w-100">Ваша заявка была отклонена</button>
 				  <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split my-3" data-bs-toggle="dropdown" aria-expanded="false">
 				  <span class="visually-hidden">Toggle Dropdown</span>
@@ -22,9 +22,9 @@
 				    <li><a class="dropdown-item" href="{% url 'core:repeat_request' profile.slug %}">Отправить повторно</a></li>
 				    <li><a class="dropdown-item" href="{% url 'core:request_delete' profile.slug %}">Отменить заявку</a></li>
 		  		</ul>
-  			</div>
+
 	{% elif friend_request %}
-		<div class="btn-group w-100">
+
 		  <button type="button" class="btn btn-info my-3 w-100">Заявка отправлена</button>
 		  <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split my-3" data-bs-toggle="dropdown" aria-expanded="false">
 		  <span class="visually-hidden">Toggle Dropdown</span>
@@ -33,9 +33,8 @@
     		<li><a class="dropdown-item" href="{% url 'core:request_delete' profile.slug %}">Отменить заявку</a></li>
   		</ul>
 
-		</div>
 	{% elif reject %}
-		<div class="btn-group w-100">
+
 				  <button type="button" class="btn btn-info my-3 w-100">Вы отклонили заявку</button>
 				  <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split my-3" data-bs-toggle="dropdown" aria-expanded="false">
 				  <span class="visually-hidden">Toggle Dropdown</span>
@@ -43,10 +42,10 @@
 				  	<ul class="dropdown-menu">
 		    		<li><a class="dropdown-item" href="{% url 'core:accept_friend' profile.slug %}">Принять</a></li>
 		  		</ul>
-  			</div>
+
 
 	{% elif reverse_request %}
-			<div class="btn-group w-100">
+
 		  <button type="button" class="btn btn-info my-3 w-100">Вам отправлена заявка в друзья</button>
 		  <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split my-3" data-bs-toggle="dropdown" aria-expanded="false">
 		  <span class="visually-hidden">Toggle Dropdown</span>
@@ -55,10 +54,10 @@
     		<li><a class="dropdown-item" href="{% url 'core:accept_friend' profile.slug %}">Принять</a></li>
     		<li><a class="dropdown-item" href="{% url 'core:reject_friend' profile.slug %}">Отклонить</a></li>
   		</ul>
-  			</div>
+
 
 	{% else %}
-		<div class="btn-group w-100">
+
 		  <a type="button" class="upload_ava btn w-100 my-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Отправить заявку в друзья</a>
 		  <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split my-3" data-bs-toggle="dropdown" aria-expanded="false">
 		  <span class="visually-hidden">Toggle Dropdown</span>
@@ -66,7 +65,8 @@
 		  	<ul class="dropdown-menu">
 	    		<li><a class="dropdown-item" href="{% url 'core:block_user' profile.slug %}">Заблокировать</a></li>
   			</ul>
-  		</div>
+
+
 
 <!-- 		<a type="button" class="upload_ava btn w-100 my-3" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
 	  Отправить заявку в друзья
@@ -93,7 +93,7 @@
 	{% endif %}
 
 {% else %}
-	<div class="btn-group w-100">
+
   <button type="button" class="btn btn-info my-3 w-100">У вас в друзьях</button>
   <button type="button" class="btn btn-info dropdown-toggle dropdown-toggle-split my-3" data-bs-toggle="dropdown" aria-expanded="false">
     <span class="visually-hidden">Toggle Dropdown</span>
@@ -101,13 +101,17 @@
   <ul class="dropdown-menu">
     <li><a class="dropdown-item" href="{% url 'core:delete_friend' profile.slug %}">Удалить из друзей</a></li>
   </ul>
-</div>
+
 
 {% endif %}
 </div>
+</div>
+</div>
 
 
-	<div class="col col-xl-4 col-lg-5 col-md-5 col-12 pt-1">
+
+
+	<div class="col col-xl-4 col-lg-5 col-md-5 col-12 pt-1 mx-2">
 					<ul class="list-group list-group-flush d-flex">
 							{% if profile.user.first_name %}
 							<li class="list-group-item">Имя: {{profile.user.first_name}}</li>
@@ -137,4 +141,54 @@
 				
 	</div>
 </div>
+
+<div class="row my-2">
+					<div class="col">
+					{% for post in posts %}
+					<div class="row">
+						<div class="col posts p-0 bg-white col-xl-7 py-3 border-bottom">
+						<div class="container-fluid">
+						<div class="row">
+							<div class="col col-1">
+								<div class="block-img-ava-post">
+									<img src="{{profile.get_avatar}}" class="img-fluid img-list rounded-circle">
+								</div>
+							</div>
+							
+							<div class="col col-10">
+								{{ profile.user.first_name }} {{ profile.user.last_name }}
+								{{post.date_created|date:"d M Y"}}
+							</div>
+			
+							<div class="col col-1 d-flex justify-content-end">
+											
+								<div class="dropdown">
+									  <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+							          	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+										<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"></path>
+										</svg>
+									  </button>
+									  <ul class="dropdown-menu">
+									    <li><a href="" class="dropdown-item"></a></li>
+									  </ul>
+								</div>
+							</div>
+						</div>
+						<div class="row d-flex justify-content-center">
+							{% if post.image %}
+								<div class="block-img-post">
+									<img src="{{post.get_photo}}" class="img-fluid img-list">
+								</div>
+							{% endif %}
+						</div>
+
+							{{post.content}}
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+					</div>
+					</div>
+
+
 {% endblock %}

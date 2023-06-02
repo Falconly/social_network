@@ -6,8 +6,8 @@
 				<!-- <div class="col col-xl-4 col-lg-4 col-md-7 col-sm-12 col-12"> -->
 					<div class="block-img-ava">
 						<img src="{{ profile.get_avatar }}" class="img-fluid img-list">
-					</div>
-				<!-- </div> -->
+					<!-- </div> -->
+				</div>
 				<div class="col col-xl-4 col-lg-5 col-md-5 col-12 pt-1">
 					<ul class="list-group list-group-flush d-flex">
 							{% if user.first_name %}
@@ -39,5 +39,90 @@
 					<a href="{% url 'core:update_profile' slug %}" class="upload_ava btn w-100 my-3">Редактировать профиль</a>
 				</div>
 </div>
+			<div class="row">
+				<div class="col col-xl-7 bg-white p-0">
+					<form method="post" enctype="multipart/form-data">
+						{% csrf_token %}
+						{% for f in form %}
+							{% if f.label != 'Пользователь' and f.label != 'Профиль' %}
+								{{f}}
+							{% endif %}
+						{% endfor %}
+				
+						<input type="submit" class="btn btn-dark" name="" value="Опубликовать">
+					</form>
+				</div>
+			</div>
+
+				<div class="row my-3">
+					<div class="col">
+					{% for post in posts %}
+					<div class="row">
+						<div class="col posts p-0 bg-white col-xl-7 py-3 border-bottom">
+						<div class="container-fluid">
+						<div class="row">
+							<div class="col col-1">
+								<div class="block-img-ava-post">
+									<img src="{{profile.get_avatar}}" class="img-fluid img-list rounded-circle">
+								</div>
+							</div>
+							
+							<div class="col col-10">
+								{{ user.first_name }} {{ user.last_name }}
+								{{post.date_created|date:"d M Y"}}
+							</div>
+			
+							<div class="col col-1 d-flex justify-content-end">
+											
+								<div class="dropdown">
+									  <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+							          	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+										<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"></path>
+										</svg>
+									  </button>
+									  <ul class="dropdown-menu">							  									  
+										<li><a class="dropdown-item" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Удалить запись</a></li>
+
+
+
+									  </ul>
+								  <!-- Modal -->
+								<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+										  <div class="modal-dialog modal-dialog-centered">
+										    <div class="modal-content">
+										      <div class="modal-header">
+										        <h5 class="modal-title" id="exampleModalToggleLabel">Удалить запись</h5>
+										        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										      </div>
+										      <div class="modal-body">
+										        Вы действительно хотите удалить запись?
+										      </div>
+										      <div class="modal-footer">
+										        <a class="btn btn-primary" href="{% url 'posts:delete_post' post.pk %}">Подтвердить</a>
+										      </div>
+										    </div>
+										  </div>
+										</div>
+
+								</div>
+							</div>
+						</div>
+						<div class="row d-flex justify-content-center">
+							{% if post.image %}
+								<div class="block-img-post">
+									<img src="{{post.get_photo}}" class="img-fluid img-list">
+								</div>
+							{% endif %}
+						</div>
+
+							{{post.content}}
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+					</div>
+					</div>
+
+		
 
 {% endblock %}
