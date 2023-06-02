@@ -30,7 +30,7 @@ class Posts(models.Model):
     objects = PostsManager()
 
     class Meta:
-        ordering = ('date_created',)
+        ordering = ('-date_created',)
         verbose_name = 'Пост'
         verbose_name_plural = 'Посты'
         db_table = 'app_posts'

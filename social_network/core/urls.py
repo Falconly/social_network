@@ -5,10 +5,12 @@ from core import views
 
 app_name = 'core'
 
-urlpatterns = [path('register/', views.RegisterUserView.as_view(), name="register"),
-               path('', views.LoginUserView.as_view(), name="home"),
-               path('logout/', LogoutView.as_view(next_page='core:home'), name="logout"),
+urlpatterns = [path('register/', views.RegisterUserView.as_view(), name='register'),
+               path('', views.LoginUserView.as_view(), name='home'),
+               path('logout/', LogoutView.as_view(next_page='core:home'), name='logout'),
 
+
+               path('news/', views.ShowNewsView.as_view(), name='news'),
                path('test/', views.test, name='test'),
 
                path('profile/<slug:profile_slug>', views.ProfileView.as_view(), name="profile"),

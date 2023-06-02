@@ -1,0 +1,42 @@
+{% extends 'core/Network/profile/base_pr.html' %}
+
+{% block content %}
+
+<div class="row d-flex justify-content-center">	
+	<div class="col col-auto col-12 col-sm-12 col-lg-9 col-xl-7">
+		{% for post in posts %}
+		<div class="container bg-white rounded my-2">
+				<div class="row border-bottom px-2 py-2">
+					<div class="col col-3 col-xl-1 col-sm-3 p-0 ">
+						<div class="block-img-people">
+							<img src="{{post.profile.get_avatar}}" class="img-list img-fluid rounded-circle">
+						</div>
+					</div>
+					<div class="col d-flex justify-content-start h-25">
+						<a class="user-link nav-link" href="{{ post.profile.get_absolute_url }}">{{ post.user.first_name|truncatechars:10 }} {{ post.user.last_name|truncatechars:10 }}</a>
+						<div class="mx-2">{{ post.date_created|date:"d M Y" }}</div>
+						<div>Категория: {{ post.category }}</div>
+					</div>
+				</div>
+
+				{% if post.image %}
+				<div class="row py-2">
+						<div class="block-img-news-post">
+							<img src="{{post.get_photo}}" class="img-fluid img-list">
+						</div>
+				</div>
+				{% endif %}
+
+				<div class="row border-bottom">
+					<div class="col posts">
+						{{ post.content }}
+					</div>
+				</div>
+
+				</div>
+		{% endfor %}
+
+	</div>
+</div>
+
+{% endblock %}

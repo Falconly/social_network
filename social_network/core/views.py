@@ -41,6 +41,18 @@ class LoginUserView(LoginView):
         return reverse('core:profile', kwargs={'profile_slug': self.request.user.profile.slug})
 
 
+class ShowNewsView(LoginRequiredMixin, ListView):
+    model = Posts
+    template_name = 'core/Network/news.html'
+    context_object_name = 'posts'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = {'title': 'Новостная лента'}
+        context.update(c_def)
+        return context
+
+
 class ProfileView(LoginRequiredMixin, FormMixin, DetailView):
     model = models.Profile
     template_name = None
