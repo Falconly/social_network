@@ -150,3 +150,12 @@ li.list-users{
 	width: 85%;
 	height: 40%;
 }
+
+.block-img-ava-comment {
+	width: 40px;
+	height: 40px;
+}
+
+.comment {
+	color: #1a1a1a;
+}

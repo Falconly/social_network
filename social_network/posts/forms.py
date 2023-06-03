@@ -17,3 +17,16 @@ class PostForm(forms.ModelForm):
         model = models.Posts
         fields = ('content', 'image', 'category', 'user', 'profile')
 
+
+class CommentForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control',
+                                                    'style': 'resize: none;',
+                                                    'placeholder': 'Написать комментарий',
+                                                    'rows': '1'})
+
+    class Meta:
+        model = models.Comments
+        fields = ('user', 'profile', 'post', 'comment')

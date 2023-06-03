@@ -31,8 +31,8 @@ class Posts(models.Model):
 
     class Meta:
         ordering = ('-date_created',)
-        verbose_name = 'Пост'
-        verbose_name_plural = 'Посты'
+        verbose_name = 'Запись'
+        verbose_name_plural = 'Записи'
         db_table = 'app_posts'
 
     @property
@@ -53,3 +53,20 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Comments(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.PROTECT, verbose_name='Пользователь', blank=True)
+    profile = models.ForeignKey('core.profile', on_delete=models.PROTECT, verbose_name='Профиль', blank=True)
+    post = models.ForeignKey(Posts, on_delete=models.CASCADE, verbose_name='Пост', blank=True, related_name='comments')
+    comment = models.TextField('Комментарий', max_length=255)
+    date_created = models.DateTimeField('Дата создания', auto_now_add=True)
+    date_modified = models.DateTimeField('Дата редактирования', blank=True, null=True)
+
+    class Meta:
+        ordering = ('date_created',)
+        verbose_name = 'Комментарий'
+        verbose_name_plural = 'Комментарии'
+
+    def __str__(self):
+        return f'Комментарий #{self.pk}'

@@ -182,13 +182,76 @@
 							{% endif %}
 						</div>
 
-							{{post.content}}
+					<div class="row">
+							<div class="col border-bottom">
+								{{post.content}}
 							</div>
 						</div>
-					</div>
+
+						<div class="row">
+							<div class="col">
+
+								{% for comment in post.comments.all %}
+								<div class="row my-3 mx-3 border-bottom">
+									<div class="col">
+										<div class="row">
+											<div class="col col-1">
+												<div class="block-img-ava-comment">
+													<img src="{{ comment.profile.get_avatar }}" class="img-fluid img-list rounded-circle">
+												</div>
+											</div>
+											<div class="col col-9">
+												<a href="{{ comment.profile.get_absolute_url }}" class="">{{ comment.user.first_name }} {{ comment.user.last_name }}</a>
+												{{ comment.date_created|date:"j b H:i Y" }}
+											</div>
+												
+											
+										</div>
+										<div class="row">
+											<div class="col mx-3 my-2">
+												{{ comment.comment }}
+											</div>
+										</div>
+									<!-- </div> -->
+									</div>
+								</div>
+								{% endfor %}
+								<form method="post">
+									<div class="row mx-3 my-3">
+									
+										{% csrf_token %}
+										<input type="hidden" name="id" value="{{post.id}}">
+										{% for f in comment_form %}
+				
+											{% if f.label != 'Пользователь' and f.label != 'Профиль' and f.label != 'Пост' %}
+											<div class="col col-10">
+												{{f}}
+											</div>
+											{% endif %}
+										{% endfor %}
+								
+									<div class="col">
+										<div class="button-submit" style="width:50px;">
+											<button type="submit" class="btn d-flex justify-content-center w-100">
+												<i class="fs-5 fa fa-reply comment d-flex justify-content-center"></i><span class="fs-4 ms-3 d-none d-sm-inline"></span>
+											</button>
+										</div>
+									</div>
+								</div>
+								</form>
+											</div>	
+								</div>
+								</div>
+								</div>
+								</div>
 					{% endfor %}
-					</div>
-					</div>
+				</div>
+			</div>
+					
+					
+				
+			
+
 
 
 {% endblock %}

@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.contrib.auth import login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -15,7 +14,7 @@ from core import forms
 from core import models
 from core import services
 
-from posts.forms import PostForm
+from posts.forms import PostForm, CommentForm
 from posts.models import Posts
 
 
@@ -41,16 +40,37 @@ class LoginUserView(LoginView):
         return reverse('core:profile', kwargs={'profile_slug': self.request.user.profile.slug})
 
 
-class ShowNewsView(LoginRequiredMixin, ListView):
+class ShowNewsView(LoginRequiredMixin, FormMixin, ListView):
     model = Posts
     template_name = 'core/Network/news.html'
     context_object_name = 'posts'
+    form_class = CommentForm
+
+    def get_success_url(self):
+        return reverse_lazy('core:news')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = {'title': 'Новостная лента'}
         context.update(c_def)
         return context
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid():
+            return self.form_valid(form)
+        return self.form_invalid(form)
+
+    def form_valid(self, form):
+        form = form.save(commit=False)
+        post_id = int(self.request.POST.get('id'))
+
+        form.user = self.request.user
+        form.profile = self.request.user.profile
+        form.post = Posts.objects.post(post_id)
+        form.save()
+
+        return super().form_valid(form)
 
 
 class ProfileView(LoginRequiredMixin, FormMixin, DetailView):
@@ -69,8 +89,14 @@ class ProfileView(LoginRequiredMixin, FormMixin, DetailView):
         context = super().get_context_data(**kwargs)
         slug = self.user.profile.slug
 
+        if self.request.POST and 'id' in self.request.POST:
+            context['comment_form'] = CommentForm(self.request.POST)
+        else:
+            context['comment_form'] = CommentForm()
+
         if self.template_name == 'core/Network/profile/profile.html':
             posts = Posts.objects.posts(self.user)
+
             c_def = {'title': f'{self.user.first_name} {self.user.last_name}', 'profile': self.user.profile,
                      'slug': slug, 'posts': posts}
         else:
@@ -104,16 +130,27 @@ class ProfileView(LoginRequiredMixin, FormMixin, DetailView):
         return self.user
 
     def post(self, request, *args, **kwargs):
+
+        self.object = self.get_object()
+        context = self.get_context_data(**kwargs)
         form = self.get_form()
-        if form.is_valid():
+        if context['form'].is_valid():
             return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
+
+        elif context['comment_form'].is_valid():
+            form = context['comment_form']
+            return self.form_valid(form)
+        return self.form_invalid(form)
 
     def form_valid(self, form):
+        context = self.get_context_data()
         form = form.save(commit=False)
         form.user = self.user
         form.profile = self.user.profile
+
+        if context['comment_form'].is_valid():
+            post_id = int(self.request.POST.get('id'))
+            form.post = Posts.objects.post(post_id)
         form.save()
         return super().form_valid(form)
 
