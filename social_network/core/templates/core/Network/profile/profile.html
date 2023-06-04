@@ -29,7 +29,7 @@
 							<li class="list-group-item">Дата рождения: не указана							</li>
 							{% endif %}
 							{% if profile.bio %}
-							<li class="list-group-item">Краткая информация о себе: {{ profile.bio|truncatechars:10 }}</li>
+							<li class="bio list-group-item">Краткая информация о себе: {{ profile.bio }}</li>
 							{% else %}
 							<li class="list-group-item">Краткая информация о себе: отсутствует</li>
 							{% endif %}
@@ -75,13 +75,13 @@
 							<div class="col col-1 d-flex justify-content-end">
 											
 								<div class="dropdown">
-									  <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+									  <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border:none">
 							          	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
 										<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"></path>
 										</svg>
 									  </button>
 									  <ul class="dropdown-menu">							  									  
-										<li><a class="dropdown-item" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Удалить запись</a></li>
+										<li><a class="menu dropdown-item" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Удалить запись</a></li>
 
 
 
@@ -135,7 +135,7 @@
 												</div>
 											</div>
 											<div class="col col-9">
-												<a href="{{ comment.profile.get_absolute_url }}" class="">{{ comment.user.first_name }} {{ comment.user.last_name }}</a>
+												<a class="user-link nav-link" href="{{ comment.profile.get_absolute_url }}" class="">{{ comment.user.first_name }} {{ comment.user.last_name }}</a>
 												{{ comment.date_created|date:"j b H:i Y" }}
 											</div>
 												

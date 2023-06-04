@@ -345,7 +345,3 @@ def remove_block(request, other_slug: str):
     other_user = services.get_other_profile(other_slug).user
     services.get_remove_block(request.user, other_user)
     return redirect(request.META.get('HTTP_REFERER'))
-
-
-def test(request):
-    return render(request, 'core/test.html')

@@ -36,6 +36,17 @@ class RegisterUserForm(UserCreationForm):
             raise ValidationError('Длина превышает 50 символов')
         return login
 
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get('first_name')
+        if len(first_name) > 50:
+            raise ValidationError('Длина превышает 50 символов')
+        return first_name
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if len(last_name) > 50:
+            raise ValidationError('Длина превышает 50 символов')
+        return last_name
 
 class LoginUserForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
@@ -43,7 +54,7 @@ class LoginUserForm(AuthenticationForm):
         self.fields['username'].label = 'Логин'
 
         self.fields['username'].widget.attrs.update({'class': 'form-control',
-                                                    'placeholder': 'Логин'})
+                                                     'placeholder': 'Логин'})
         self.fields['password'].widget.attrs.update({'class': 'form-control',
                                                      'placeholder': 'Пароль'})
 
@@ -82,6 +93,15 @@ class UpdateProfileForm(forms.ModelForm):
             raise ValidationError('Длина превышает 50 символов')
         return bio
 
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get('first_name')
+        if len(first_name) > 50:
+            raise ValidationError('Длина превышает 50 символов')
+        return first_name
 
-#class SearchProfileForm(Form):
-    #profile_name = CharField(label="Поиск по ")
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get('last_name')
+        if len(last_name) > 50:
+            raise ValidationError('Длина превышает 50 символов')
+        return last_name
+

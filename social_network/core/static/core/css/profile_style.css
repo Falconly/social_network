@@ -99,7 +99,7 @@ li.list-users{
 }
 
 .user-link {
-	font-size: 18px;
+	font-size: 15px;
 	font-weight: bold;
 }
 
@@ -128,7 +128,7 @@ li.list-users{
 
 	.block {
 		width:150px;
-		height: 250px;
+		height: 320px;
 	}
 }
 
@@ -137,9 +137,10 @@ li.list-users{
 	height:100%;
 }
 
-.posts {
+.posts, div ul li {
 	word-break: break-all;
 }
+
 
 .block-img-ava-post {
 	width: 50px;
@@ -156,6 +157,14 @@ li.list-users{
 	height: 40px;
 }
 
+
 .comment {
 	color: #1a1a1a;
+}
+
+.send-message {
+	width:0px;
+	height:0px;
+	border:none; 
+	display: block;
 }
