@@ -148,6 +148,9 @@ class ProfileView(LoginRequiredMixin, FormMixin, DetailView):
         form.user = self.user
         form.profile = self.user.profile
 
+        if context['form'].is_valid():
+            form.to_user = self.other_user.user
+
         if context['comment_form'].is_valid():
             post_id = int(self.request.POST.get('id'))
             form.post = Posts.objects.post(post_id)

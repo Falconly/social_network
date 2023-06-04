@@ -48,6 +48,7 @@ class RegisterUserForm(UserCreationForm):
             raise ValidationError('Длина превышает 50 символов')
         return last_name
 
+
 class LoginUserForm(AuthenticationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -104,4 +105,3 @@ class UpdateProfileForm(forms.ModelForm):
         if len(last_name) > 50:
             raise ValidationError('Длина превышает 50 символов')
         return last_name
-

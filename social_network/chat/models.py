@@ -18,10 +18,10 @@ class Chat(models.Model):
 
 class Messages(models.Model):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, verbose_name='Чат', blank=True)
-    from_user = models.ForeignKey(get_user_model(), on_delete=models.PROTECT, verbose_name='Отправитель', blank=True,
+    from_user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='Отправитель', blank=True,
                                   related_name='messages'
                                   )
-    to_user = models.ForeignKey(get_user_model(), on_delete=models.PROTECT, verbose_name='Получатель', blank=True,
+    to_user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='Получатель', blank=True,
                                 related_name='+')
     pub_date = models.DateTimeField('Дата отправления', auto_now_add=True)
     date_modified = models.DateTimeField('Дата редактирования', blank=True, null=True)

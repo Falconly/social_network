@@ -44,6 +44,7 @@ class ShowMessagesView(LoginRequiredMixin, FormMixin, ListView):
         form.save()
         return super().form_valid(form)
 
+
     def get_success_url(self):
         return reverse_lazy('chat:messages', kwargs={'chat_pk': self.kwargs['chat_pk']})
 
@@ -65,6 +66,7 @@ class ListChatView(ListView):
     model = models.Chat
     template_name = 'chat/list_chat.html'
     context_object_name = 'users'
+    extra_context = {'title': 'Список чатов'}
 
     def get_queryset(self):
         qs = services.get_user_chat(self.request.user)

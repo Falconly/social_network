@@ -7,8 +7,11 @@ from django.shortcuts import get_object_or_404
 
 # Create your models here.
 class PostsManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().all()
+
     def posts(self, user):
-        posts = list(Posts.objects.select_related('user').filter(user=user))
+        posts = list(Posts.objects.select_related('to_user').filter(to_user=user))
         return posts
 
     def post(self, pk_post):
@@ -17,8 +20,10 @@ class PostsManager(models.Manager):
 
 
 class Posts(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.PROTECT, verbose_name='Пользователь', blank=True)
-    profile = models.ForeignKey('core.profile', on_delete=models.PROTECT, verbose_name='Профиль', blank=True)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='Пользователь', blank=True)
+    profile = models.ForeignKey('core.profile', on_delete=models.CASCADE, verbose_name='Профиль', blank=True)
+    to_user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='Получатель поста', blank=True,
+                                related_name='+')
     date_created = models.DateTimeField('Дата создания', auto_now_add=True)
     date_modified = models.DateTimeField('Дата обновления', blank=True, null=True)
     image = models.ImageField('Фотография поста', blank=True, null=True,
@@ -56,8 +61,8 @@ class Category(models.Model):
 
 
 class Comments(models.Model):
-    user = models.ForeignKey(get_user_model(), on_delete=models.PROTECT, verbose_name='Пользователь', blank=True)
-    profile = models.ForeignKey('core.profile', on_delete=models.PROTECT, verbose_name='Профиль', blank=True)
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name='Пользователь', blank=True)
+    profile = models.ForeignKey('core.profile', on_delete=models.CASCADE, verbose_name='Профиль', blank=True)
     post = models.ForeignKey(Posts, on_delete=models.CASCADE, verbose_name='Пост', blank=True, related_name='comments')
     comment = models.TextField('Комментарий', max_length=255)
     date_created = models.DateTimeField('Дата создания', auto_now_add=True)

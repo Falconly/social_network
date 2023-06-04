@@ -44,7 +44,7 @@
 					<form method="post" enctype="multipart/form-data">
 						{% csrf_token %}
 						{% for f in form %}
-							{% if f.label != 'Пользователь' and f.label != 'Профиль' %}
+							{% if f.label != 'Пользователь' and f.label != 'Профиль' and f.label != 'Получатель поста' and f.label != 'Дата обновления' %}
 								{{f}}
 							{% endif %}
 						{% endfor %}
@@ -63,12 +63,12 @@
 						<div class="row">
 							<div class="col col-1">
 								<div class="block-img-ava-post">
-									<img src="{{profile.get_avatar}}" class="img-fluid img-list rounded-circle">
+									<img src="{{post.profile.get_avatar}}" class="img-fluid img-list rounded-circle">
 								</div>
 							</div>
 							
 							<div class="col col-10">
-								{{ user.first_name }} {{ user.last_name }}
+								<a class="user-link nav-link" href="{{ post.profile.get_absolute_url }}">{{ post.user.first_name }} {{ post.user.last_name }}</a>
 								{{post.date_created|date:"j b H:i Y"}}
 							</div>
 			
@@ -81,29 +81,9 @@
 										</svg>
 									  </button>
 									  <ul class="dropdown-menu">							  									  
-										<li><a class="menu dropdown-item" data-bs-toggle="modal" href="#exampleModalToggle" role="button">Удалить запись</a></li>
-
-
-
+										<li><a class="menu dropdown-item" href="{% url 'posts:delete_post' post.pk %}">Удалить запись</a></li>
+										<li><a href="{% url 'posts:update_post' post.pk %}" class="menu dropdown-item">Редактировать запись</a></li>
 									  </ul>
-								  <!-- Modal -->
-								<div class="modal fade" id="exampleModalToggle" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
-										  <div class="modal-dialog modal-dialog-centered">
-										    <div class="modal-content">
-										      <div class="modal-header">
-										        <h5 class="modal-title" id="exampleModalToggleLabel">Удалить запись</h5>
-										        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-										      </div>
-										      <div class="modal-body">
-										        Вы действительно хотите удалить запись?
-										      </div>
-										      <div class="modal-footer">
-										        <a class="btn btn-primary" href="{% url 'posts:delete_post' post.pk %}">Подтвердить</a>
-										      </div>
-										    </div>
-										  </div>
-										</div>
-
 								</div>
 							</div>
 						</div>
@@ -138,8 +118,20 @@
 												<a class="user-link nav-link" href="{{ comment.profile.get_absolute_url }}" class="">{{ comment.user.first_name }} {{ comment.user.last_name }}</a>
 												{{ comment.date_created|date:"j b H:i Y" }}
 											</div>
-												
-											
+										{% if comment.user == request.user %}
+										<div class="col col-1 d-flex justify-content-end">
+									        <div class="dropdown">
+											  <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border:none">
+									          	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+												<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"></path>
+												</svg>
+											  </button>
+											  <ul class="dropdown-menu">
+											    <li><a href="{% url 'posts:delete_comment' comment.pk %}" class="dropdown-item">Удалить комментарий</a></li>
+											  </ul>
+											</div>
+										</div>
+										{% endif %}
 										</div>
 										<div class="row">
 											<div class="col mx-3 my-2">

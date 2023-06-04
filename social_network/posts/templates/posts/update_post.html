@@ -1,0 +1,21 @@
+{% extends 'core/Network/profile/base_pr.html' %}
+
+{% block content %}
+<div class="content p-3 col">
+			<div class="row d-flex justify-content-center">
+				<div class="col col-12 col-sm-12 col-md-9 col-lg-6 col-xl-4">
+<form method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	{% for f in form %}
+			{% if f.label != 'Пользователь' and f.label != 'Профиль' and f.label != 'Получатель поста' and f.label != 'Дата обновления' %}
+				{{f}}
+			{% endif %}
+	{% endfor %}
+	<input type="submit" name="" class="btn btn-success w-100 my-3" value="Сохранить">
+</form>
+</div>
+</div>
+</div>
+
+
+{% endblock %}
