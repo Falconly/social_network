@@ -8,7 +8,7 @@ from core import services
 # Create your tests here.
 class BaseTest(TestCase):
     def setUp(self) -> None:
-        self.client = Client()
+
         user_data = {
             'first_name': 'Name',
             'last_name': 'last_name',
@@ -25,6 +25,7 @@ class BaseTest(TestCase):
             'password': 'er2jiuwhuichwt'
         }
         self.user2 = get_user_model().objects.create(**user2_data)
+        self.client = Client(HTTP_REFERER=reverse('core:profile', kwargs={'profile_slug': self.user.profile.slug}))
 
 
 class AuthTest(BaseTest, TestCase):
