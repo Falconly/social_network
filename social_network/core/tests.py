@@ -16,6 +16,8 @@ class BaseTest(TestCase):
             'email': 'anfjasbn@mail.ru',
             'password': 'er2jiuwhuichwt'
         }
+        self.credentials = {'username': user_data['username'],
+                            'password': user_data['password']}
         self.user = get_user_model().objects.create_user(**user_data)
         user2_data = {
             'first_name': 'Name',
@@ -106,7 +108,7 @@ class AuthTest(BaseTest, TestCase):
 
 class ProfileTest(BaseTest, TestCase):
     def test_detail_view_profile(self):
-        self.client.login(username='Login2', password='er2jiuwhuichwt')
+        self.client.login(**self.credentials)
         response = self.client.get(reverse('core:profile', kwargs={'profile_slug': self.user.profile.slug}),
                                    follow=True)
 
@@ -114,14 +116,14 @@ class ProfileTest(BaseTest, TestCase):
         self.assertTemplateUsed(response, 'core/Network/profile/profile.html')
 
     def test_not_auth_detail_view_profile(self):
-        self.client.login(username='Login2', password='er2jiuwhuichwt')
+        self.client.login(**self.credentials)
         response = self.client.get(reverse('core:profile', kwargs={'profile_slug': self.user2.profile.slug}))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'core/Network/profile/other_profile.html')
 
     def test_update_view_profile(self):
-        self.client.login(username='Login2', password='er2jiuwhuichwt')
+        self.client.login(**self.credentials)
         form_data = {
             'first_name': 'first_name',
             'last_name': 'last_name',
@@ -136,7 +138,7 @@ class ProfileTest(BaseTest, TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_update_view_profile_invalid(self):
-        self.client.login(username='Login2', password='er2jiuwhuichwt')
+        self.client.login(**self.credentials)
         form_data = {
             'first_name': '',
             'last_name': '',
@@ -155,7 +157,7 @@ class ProfileTest(BaseTest, TestCase):
 
 class FriendShipRequestTest(BaseTest, TestCase):
     def test_friend_request(self):
-        self.client.login(username='Login2', password='er2jiuwhuichwt')
+        self.client.login(**self.credentials)
 
         response = self.client.get(reverse('core:following', kwargs={'profile_slug': self.user2.profile.slug}))
         friend_request = services.get_friend_request(self.user, self.user2)
