@@ -2,8 +2,7 @@ from django.contrib.auth import login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
-from django.db import transaction
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, DetailView, UpdateView, ListView
 from django.views.generic.edit import FormMixin
@@ -56,6 +55,7 @@ class ShowNewsView(LoginRequiredMixin, FormMixin, ListView):
         return context
 
     def post(self, request, *args, **kwargs):
+        self.object_list = self.get_queryset()
         form = self.get_form()
         if form.is_valid():
             return self.form_valid(form)
@@ -130,7 +130,6 @@ class ProfileView(LoginRequiredMixin, FormMixin, DetailView):
         return self.user
 
     def post(self, request, *args, **kwargs):
-
         self.object = self.get_object()
         context = self.get_context_data(**kwargs)
         form = self.get_form()
@@ -182,14 +181,13 @@ class UpdateProfileView(LoginRequiredMixin, UpdateView):
     def form_valid(self, form):
         context = self.get_context_data()
         user_form = context['user_form']
-        with transaction.atomic():
-            if all([form.is_valid(), user_form.is_valid()]):
-                user_form.save()
-                form.save()
-            else:
-                context.update({'user_form': user_form})
-                return self.render_to_response(context)
-        return super(UpdateProfileView, self).form_valid(form)
+        if all([form.is_valid(), user_form.is_valid()]):
+            user_form.save()
+            form.save()
+        else:
+            context.update({'user_form': user_form})
+            return self.render_to_response(context)
+        return super().form_valid(form)
 
 
 class PeoplesListView(LoginRequiredMixin, ListView):
