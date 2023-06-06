@@ -93,10 +93,11 @@ class UpdateProfileForm(forms.ModelForm):
     def clean_date_birthday(self):
         date_birthday = self.cleaned_data.get('date_birthday')
         end_date = datetime.date(1923, 12, 31)
-        if date_birthday > datetime.datetime.now().date():
-            raise ValidationError('Дата не должна превышать текущую')
-        elif date_birthday < end_date:
-            raise ValidationError(f'Дата не должна быть меньше {end_date}')
+        if date_birthday:
+            if date_birthday > datetime.datetime.now().date():
+                raise ValidationError('Дата не должна превышать текущую')
+            elif date_birthday < end_date:
+                raise ValidationError(f'Дата не должна быть меньше {end_date}')
         return date_birthday
 
     def clean_bio(self):
