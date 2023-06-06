@@ -116,3 +116,9 @@ class UpdateProfileForm(forms.ModelForm):
         if len(last_name) > 50:
             raise ValidationError('Длина превышает 50 символов')
         return last_name
+
+
+class SearchUserForm(forms.Form):
+    user_name = forms.CharField(label='Поиск по имени', required=False)
+    user_name.widget.attrs.update({'class': 'form-control me-2', 'placeholder': 'Поиск',
+                                      'type': 'search', 'aria-label': 'Search'})

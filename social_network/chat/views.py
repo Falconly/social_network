@@ -45,7 +45,6 @@ class ShowMessagesView(LoginRequiredMixin, FormMixin, ListView):
         form.save()
         return super().form_valid(form)
 
-
     def get_success_url(self):
         return reverse_lazy('chat:messages', kwargs={'chat_pk': self.kwargs['chat_pk']})
 

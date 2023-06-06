@@ -1,5 +1,11 @@
 {% extends 'core/Network/friends/base_friends.html' %}
 
+{% block search_form %}
+{% for f in form_search %}
+	{{f}}
+{% endfor %}
+{% endblock %}
+
 {% block main %}
 {% for f in rejected_requests %}
 {% if f.rejected %}
@@ -13,7 +19,7 @@
 	
 								<div class="col d-flex justify-content-start h-25">
 
-									<a class="user-link nav-link" href="{{ f.to_user.profile.get_absolute_url }}">{{ f.to_user|truncatechars:10 }}</a>
+									<a class="user-link nav-link" href="{{ f.to_user.profile.get_absolute_url }}">{{ f.to_user.get_full_name|truncatechars:20 }}</a>
 								</div>
 								<div class="col col-1 d-flex justify-content-end">
 						            <div class="dropdown">

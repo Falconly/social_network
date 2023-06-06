@@ -31,8 +31,9 @@
         {% endfor %}
       </ul>
 
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Поиск" aria-label="Search">
+      <form class="d-flex" method="get" role="search">
+        {% block search_form %}
+        {% endblock %}
         <button class="btn btn-outline-success" type="submit">Поиск</button>
       </form>
     </div>

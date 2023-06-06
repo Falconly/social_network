@@ -1,6 +1,12 @@
 {% extends 'core/Network/friends/base_friends.html' %}
 
 
+{% block search_form %}
+{% for f in form_search %}
+	{{f}}
+{% endfor %}
+{% endblock %}
+
 {% block main %}
 	{% for friend_request in friend_requests %}
 	{% if not friend_request.rejected %}
@@ -13,7 +19,7 @@
 					</div>
 					<div class="col d-flex justify-content-start h-25">
 
-									<a class="user-link nav-link" href="{{ friend_request.from_user.profile.get_absolute_url }}">{{ friend_request.from_user.first_name|truncatechars:10 }} {{ friend_request.from_user.last_name|truncatechars:10 }} </a>
+									<a class="user-link nav-link" href="{{ friend_request.from_user.profile.get_absolute_url }}">{{ friend_request.from_user.get_full_name|truncatechars:20 }}</a>
 					</div>
 
 					<div class="col col-1 d-flex justify-content-end">

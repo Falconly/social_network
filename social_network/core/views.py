@@ -2,6 +2,7 @@ from django.contrib.auth import login, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
+from django.db.models import Q
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, DetailView, UpdateView, ListView
@@ -235,11 +236,15 @@ class ShowFriendsView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         list_friend = services.get_list_friends(self.request.user)
+
+        user_name = self.request.GET.get('user_name')
+        if user_name:
+            list_friend = services.get_list_search_friend(self.request.user, user_name)
         return list_friend
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = {'title': 'Друзья'}
+        c_def = {'title': 'Друзья', 'form_search': forms.SearchUserForm}
         context.update(c_def)
         return context
 
@@ -247,12 +252,19 @@ class ShowFriendsView(LoginRequiredMixin, ListView):
 class ShowSubsView(LoginRequiredMixin, ListView):
     model = models.Profile
     template_name = 'core/Network/friends/subs.html'
-    extra_context = {'title': 'Заявки'}
+    context_object_name = 'friend_requests'
+
+    def get_queryset(self):
+        user_name = self.request.GET.get('user_name')
+        if user_name:
+            friend_requests = services.get_list_search_request_input(self.request.user, user_name)
+            return friend_requests
+        friend_requests = services.get_list_friend_request_input(self.request.user)
+        return friend_requests
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        friend_requests = services.get_list_friend_request_input(self.request.user)
-        c_def = {'title': 'Заявки', 'friend_requests': friend_requests}
+        c_def = {'title': 'Заявки', 'form_search': forms.SearchUserForm}
         context.update(c_def)
         return context
 
@@ -268,23 +280,41 @@ def delete_friend(request, friend_slug: str):
 class ShowFromRequestView(LoginRequiredMixin, ListView):
     model = FriendshipRequest
     template_name = "core/Network/friends/from_request.html"
-    extra_context = {'title': 'Отправленные заявки', 'h': 'Список отправленных заявок'}
     context_object_name = 'friend_requests'
 
     def get_queryset(self):
+        user_name = self.request.GET.get('user_name')
+        if user_name:
+            from_requests = services.get_search_sent_requests(self.request.user, user_name)
+            return from_requests
         friend_requests = services.get_sent_requests(self.request.user)
         return friend_requests
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = {'title': 'Отправленные заявки', 'form_search': forms.SearchUserForm}
+        context.update(c_def)
+        return context
 
 
 class ShowRejectedRequestsView(LoginRequiredMixin, ListView):
     model = FriendshipRequest
     template_name = 'core/Network/friends/rejected_requests.html'
     context_object_name = 'rejected_requests'
-    extra_context = {'title': 'Отклоненные заявки'}
 
     def get_queryset(self):
-        rejected_requests = FriendshipRequest.objects.select_related('from_user').filter(from_user=self.request.user)
+        user_name = self.request.GET.get('user_name')
+        if user_name:
+            rejected_requests = services.get_search_rejected_requests(self.request.user, user_name)
+            return rejected_requests
+        rejected_requests = services.get_rejected_requests(self.request.user)
         return rejected_requests
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        c_def = {'title': 'Отклоненные заявки', 'form_search': forms.SearchUserForm}
+        context.update(c_def)
+        return context
 
 
 class ShowYouRejectedRequestsView(LoginRequiredMixin, ListView):
@@ -294,8 +324,18 @@ class ShowYouRejectedRequestsView(LoginRequiredMixin, ListView):
     extra_context = {'title': 'Вами отклоненные заявки'}
 
     def get_queryset(self):
-        rejected_request = Friend.objects.rejected_requests(user=self.request.user)
+        user_name = self.request.GET.get('user_name')
+        if user_name:
+            rejected_requests = services.get_search_you_rejected_requests(self.request.user, user_name)
+            return rejected_requests
+        rejected_request = services.get_you_rejected_requests(self.request.user)
         return rejected_request
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context= super().get_context_data(**kwargs)
+        c_def = {'title': 'Вами отклоненные заявки', 'form_search': forms.SearchUserForm}
+        context.update(c_def)
+        return context
 
 
 @login_required
@@ -317,4 +357,3 @@ def friendship_request_repeat(request, other_slug: str):
         friend_request.cancel()
         services.get_add_friend(request.user, other_user)
     return redirect('core:from_request', user.profile.slug)
-

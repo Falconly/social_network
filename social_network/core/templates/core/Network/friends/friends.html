@@ -1,6 +1,12 @@
 {% extends 'core/Network/friends/base_friends.html' %}
 
 
+{% block search_form %}
+{% for f in form_search %}
+	{{f}}
+{% endfor %}
+{% endblock %}
+
 {% block main %}
 	{% for friend in friends %}
 	<div class="container bg-white py-1 border-bottom">
@@ -13,7 +19,7 @@
 	
 		<div class="col d-flex justify-content-start h-25">
 
-			<a class="user-link nav-link" href="{{ friend.profile.get_absolute_url }}">{{ friend.first_name|truncatechars:10 }} {{ friend.last_name|truncatechars:10 }}</a>
+			<a class="user-link nav-link" href="{{ friend.profile.get_absolute_url }}">{{ friend.get_full_name|truncatechars:20 }}</a>
 		</div>
 	<div class="col col-1 d-flex justify-content-end">
         <div class="dropdown">
