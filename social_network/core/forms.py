@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
@@ -28,7 +30,7 @@ class RegisterUserForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username', 'email', 'password1', 'password2']
+        fields = ('first_name', 'last_name', 'username', 'email', 'password1', 'password2',)
 
     def clean_username(self):
         login = self.cleaned_data.get('username')
@@ -74,19 +76,28 @@ class UpdateUserForm(forms.ModelForm):
 
     class Meta:
         model = get_user_model()
-        fields = ('first_name', 'last_name', 'email')
+        fields = ('first_name', 'last_name', 'email',)
 
 
 class UpdateProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['avatar'].label = "Аватар"
+        self.fields['avatar'].label = 'Аватар'
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
 
     class Meta:
         model = models.Profile
         fields = ('slug', 'bio', 'date_birthday', 'avatar')
+
+    def clean_date_birthday(self):
+        date_birthday = self.cleaned_data.get('date_birthday')
+        end_date = datetime.date(1923, 12, 31)
+        if date_birthday > datetime.datetime.now().date():
+            raise ValidationError('Дата не должна превышать текущую')
+        elif date_birthday < end_date:
+            raise ValidationError(f'Дата не должна быть меньше {end_date}')
+        return date_birthday
 
     def clean_bio(self):
         bio = self.cleaned_data.get('bio')

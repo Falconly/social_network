@@ -33,6 +33,7 @@ class PostsTest(BaseTest, TestCase):
             'profile': self.user.profile.pk,
             'to_user': self.user2.pk,
         }
+
         response = self.client.post(reverse('posts:update_post', kwargs={'post_pk': self.post.pk}), data=form_data)
 
         self.assertEqual(response.status_code, 302)

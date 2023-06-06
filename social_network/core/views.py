@@ -7,7 +7,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, DetailView, UpdateView, ListView
 from django.views.generic.edit import FormMixin
 
-from friendship.models import Friend, Block, FriendshipRequest
+from friendship.models import Friend, FriendshipRequest
 
 from core import forms
 from core import models
@@ -318,31 +318,3 @@ def friendship_request_repeat(request, other_slug: str):
         services.get_add_friend(request.user, other_user)
     return redirect('core:from_request', user.profile.slug)
 
-
-@login_required
-def block_user(request, other_slug: str):
-    other_user = services.get_other_profile(other_slug).user
-    services.get_block_user(request.user, other_user)
-    return redirect(request.META.get('HTTP_REFERER'))
-
-
-class ShowBlockedUsersView(LoginRequiredMixin, ListView):
-    model = Block
-    template_name = 'core/Network/friends/blocked_users.html'
-    context_object_name = 'blocked_users'
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super().get_context_data(**kwargs)
-        c_def = {'title': 'Заблокированные пользователи'}
-        context.update(c_def)
-        return context
-
-    def get_queryset(self):
-        return services.get_blocked_users(self.request.user)
-
-
-@login_required
-def remove_block(request, other_slug: str):
-    other_user = services.get_other_profile(other_slug).user
-    services.get_remove_block(request.user, other_user)
-    return redirect(request.META.get('HTTP_REFERER'))

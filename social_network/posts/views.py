@@ -38,6 +38,9 @@ class UpdatePostView(LoginRequiredMixin, UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        prev_url = self.request.META.get('HTTP_REFERER')
+        if prev_url:
+            self.request.session['prev_url'] = prev_url
         return context
 
     def get_object(self, queryset=None):
@@ -57,4 +60,6 @@ class UpdatePostView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def get_success_url(self):
+        if 'prev_url' in self.request.session:
+            return self.request.session['prev_url']
         return reverse_lazy('core:profile', kwargs={'profile_slug': self.request.user.profile.slug})

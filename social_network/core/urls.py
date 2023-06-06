@@ -11,11 +11,10 @@ urlpatterns = [path('register/', views.RegisterUserView.as_view(), name='registe
 
 
                path('news/', views.ShowNewsView.as_view(), name='news'),
+               path('peoples/', views.PeoplesListView.as_view(), name="peoples"),
 
                path('profile/<slug:profile_slug>', views.ProfileView.as_view(), name="profile"),
                path('profile/<slug:profile_slug>/update', views.UpdateProfileView.as_view(), name="update_profile"),
-
-               path('peoples/', views.PeoplesListView.as_view(), name="peoples"),
 
                path('profile/<slug:profile_slug>/follower', views.friendship_request, name="following"),
                path('profile/<slug:profile_slug>/friends', views.ShowFriendsView.as_view(), name="friends"),
@@ -33,9 +32,4 @@ urlpatterns = [path('register/', views.RegisterUserView.as_view(), name='registe
                     name="your_rejected_requests"),
                path('profile/<slug:other_slug>/delete_request', views.friendship_request_delete, name="request_delete"),
                path('profile/<slug:other_slug>/repeat_request', views.friendship_request_repeat, name="repeat_request"),
-
-               path('profile/<slug:other_slug>/block_user', views.block_user, name="block_user"),
-               path('profile/<slug:profile_slug>/list_block_user', views.ShowBlockedUsersView.as_view(),
-                    name="list_block_user"),
-               path('profile/<slug:other_slug>/remove_block', views.remove_block, name="remove_block")
                ]

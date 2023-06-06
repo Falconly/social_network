@@ -1,0 +1,116 @@
+{% csrf_token %}
+{% for post in posts %}
+					<div class="row">
+						<div class="col posts p-0 bg-white col-xl-7 py-3 border-bottom">
+						<div class="container-fluid">
+						<div class="row">
+							<div class="col col-1">
+								<div class="block-img-ava-post">
+									<img src="{{post.profile.get_avatar}}" class="img-fluid img-list rounded-circle">
+								</div>
+							</div>
+							
+							<div class="col col-10">
+								<a class="user-link nav-link" href="{{ post.profile.get_absolute_url }}">{{ post.user.first_name }} {{ post.user.last_name }}</a>
+								{{post.date_created|date:"j b H:i Y"}}
+							</div>
+			
+							<div class="col col-1 d-flex justify-content-end">
+											
+								<div class="dropdown">
+									  <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border:none">
+							          	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+										<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"></path>
+										</svg>
+									  </button>
+									  <ul class="dropdown-menu">							  									  
+										<li><a class="menu dropdown-item" href="{% url 'posts:delete_post' post.pk %}">Удалить запись</a></li>
+										<li><a href="{% url 'posts:update_post' post.pk %}" class="menu dropdown-item">Редактировать запись</a></li>
+									  </ul>
+								</div>
+							</div>
+						</div>
+						<div class="row d-flex justify-content-center">
+							{% if post.image %}
+								<div class="block-img-post">
+									<img src="{{post.get_photo}}" class="img-fluid img-list">
+								</div>
+							{% endif %}
+						</div>
+						<div class="row">
+							<div class="col border-bottom">
+								{{post.content}}
+							</div>
+						</div>
+							
+							
+						<!-- Комментарии к постам -->
+						<div class="row">
+							<div class="col">
+
+								{% for comment in post.comments.all %}
+								<div class="row my-3 mx-3 border-bottom">
+									<div class="col">
+										<div class="row">
+											<div class="col col-1">
+												<div class="block-img-ava-comment">
+													<img src="{{ comment.profile.get_avatar }}" class="img-fluid img-list rounded-circle">
+												</div>
+											</div>
+											<div class="col col-9">
+												<a class="user-link nav-link" href="{{ comment.profile.get_absolute_url }}" class="">{{ comment.user.first_name }} {{ comment.user.last_name }}</a>
+												{{ comment.date_created|date:"j b H:i Y" }}
+											</div>
+										{% if comment.user == request.user %}
+										<div class="col col-1 d-flex justify-content-end">
+									        <div class="dropdown">
+											  <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false" style="border:none">
+									          	<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-three-dots" viewBox="0 0 16 16">
+												<path d="M3 9.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm5 0a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z"></path>
+												</svg>
+											  </button>
+											  <ul class="dropdown-menu">
+											    <li><a href="{% url 'posts:delete_comment' comment.pk %}" class="dropdown-item">Удалить комментарий</a></li>
+											  </ul>
+											</div>
+										</div>
+										{% endif %}
+										</div>
+										<div class="row">
+											<div class="col mx-3 my-2">
+												{{ comment.comment }}
+											</div>
+										</div>
+									<!-- </div> -->
+									</div>
+								</div>
+								{% endfor %}
+								<form method="post">
+									<div class="row mx-3 my-3">
+									
+										{% csrf_token %}
+										<input type="hidden" name="id" value="{{post.id}}">
+										{% for f in comment_form %}
+				
+											{% if f.label != 'Пользователь' and f.label != 'Профиль' and f.label != 'Пост' %}
+											<div class="col col-10">
+												{{f}}
+											</div>
+											{% endif %}
+										{% endfor %}
+								
+									<div class="col">
+										<div class="button-submit" style="width:50px;">
+											<button type="submit" class="btn d-flex justify-content-center w-100">
+												<i class="fs-5 fa fa-reply comment d-flex justify-content-center"></i><span class="fs-4 ms-3 d-none d-sm-inline"></span>
+											</button>
+										</div>
+									</div>
+								</div>
+								</form>		
+								</div>
+ </div>
+		</div>	
+		</div>	
+	</div>
+					{% endfor %}

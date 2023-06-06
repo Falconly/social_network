@@ -10,39 +10,8 @@
             <div class="card-header d-flex justify-content-between align-items-center p-3">
               <h5 class="mb-0">Чат с {{ to_user.first_name|truncatechars:10 }} {{ to_user.last_name|truncatechars:10 }}</h5>
             </div>
-            <div class="card-body perfect-scrollbar ps ps--active-y" data-mdb-perfect-scrollbar="true" style="position: relative; height: 400px; overflow: auto;">
-
-
-
-            {% for m in messages %}
-
-            	{% if m.from_user == request.user %}
-              <div class="d-flex flex-row justify-content-start">
-                <div style="width: 40px; height:40px">
-            		<img src="{{ request.user.profile.get_avatar }}" class="img-fluid rounded-circle" style="object-fit: cover;width:100%;height:100%">
-            	</div>
-                <div>
-                  <p class="small p-2 ms-3 mb-1 rounded-3" style="background-color: #f5f6f7;">{{ m.text }}</p>
-                  <p class="small ms-3 mb-3 rounded-3 text-muted">{{ m.pub_date|date:"j b H:i Y" }}</p>
-                </div>
-              </div>
-              	{% else %}
-
-   	
-              <div class="d-flex flex-row justify-content-end mb-4 pt-1">
-                <div>
-                  <p class="small p-2 me-3 mb-1 text-white rounded-3 bg-primary">{{ m.text }}</p>
-                  <p class="small me-3 mb-3 rounded-3 text-muted d-flex justify-content-end">{{ m.pub_date|date:"j b H:i Y" }}</p>
-                </div>
-                <div style="width: 40px; height:40px">
-            		<img src="{{ m.from_user.profile.get_avatar }}" class="img-fluid rounded-circle" style="object-fit: cover;width:100%;height:100%">
-            	</div>
-              </div>
-
-             	{% endif %}
-              {% endfor %}
-            
-
+            <div class="card-body perfect-scrollbar ps ps--active-y" id="messages-list" data-mdb-perfect-scrollbar="true" style="position: relative; height: 400px; overflow: auto;">
+              {% include 'chat/messages-list.html' %}     
             </div>
             <div class="card-footer d-flex text-muted p-3">
               	<div class="me-2" style="width: 40px; height:40px">
@@ -59,7 +28,9 @@
 
 						{% endif %}
 						{% endfor %}
-						  <button class="btn send-message"><i class="fas fa-paper-plane"></i></a></button>
+						  <button class="btn send-message">
+                <i class="fas fa-paper-plane"></i>
+              </button>
 					</form>
           </div>
           </div>
@@ -69,32 +40,5 @@
         </div>
       </div>
 
-<script>
-$(document).on('submit', '#create_post', function(e){
-  e.preventDefault();
-  var post_title = $('#post_title').val();
-  var post_text = $('#post_text').val();
-  var post_image = $('#post_image').val();
 
-  if (post_text != ''){
-    $('#post_title').val('');
-    $('#post_text').val('');
-    $('#post_image').val('');
-     $.ajax({
-      type:'POST',
-      url:"/account/",
-      data:{
-        post_title:post_title,
-        post_text:post_text,
-        post_image:post_image,
-        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val(),
-      },
-      success:function () {
-        alert('Успешно создан!');
-      }
-    });
-  };
-});
-
-</script>
 {% endblock %}

@@ -26,7 +26,7 @@ class ShowMessagesView(LoginRequiredMixin, FormMixin, ListView):
         context = super().get_context_data(**kwargs)
 
         c_def = {'title': 'Личные сообщения', 'messages': self.messages, 'to_user': self.to_user,
-                 'chat': self.chat}
+                 'chat_pk': self.chat.pk}
         context.update(c_def)
         return context
 
