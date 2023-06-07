@@ -65,9 +65,10 @@ class CreateChatView(View):
 class ListChatView(ListView):
     model = models.Chat
     template_name = 'chat/list_chat.html'
-    context_object_name = 'users'
+    context_object_name = 'chats'
     extra_context = {'title': 'Список чатов'}
 
     def get_queryset(self):
-        qs = services.get_user_chat(self.request.user)
+        qs = services.get_chat(self.request.user)
         return qs
+

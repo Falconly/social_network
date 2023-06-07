@@ -4,19 +4,22 @@
 <div class="row d-flex justify-content-center">	
 	<div class="col col-auto col-12 col-sm-12 col-lg-9 col-xl-7">
 		<h3 class="text-center">Список чатов</h3>
-			{% for u in users %}
+			{% for u in chats %}
 			<div class="container bg-white">
 				<div class="row border-bottom py-1">
 					<div class="col col-3 col-xl-1 col-sm-3 p-0">
-						<div class="block-img-people">
-							<img src="{{u.profile.get_avatar}}" class="img-list img-fluid rounded-circle">
+					
+					{% for m in u.members.all %}
+					<div class="block-img-people">
+							<img src="{{m.profile.get_avatar}}" class="img-list img-fluid rounded-circle">
 						</div>
+					{% endfor %}
 					</div>
 					<div class="col d-flex justify-content-start h-25">
-						<a class="user-link nav-link" href="{{ u.profile.get_absolute_url }}">{{ u.first_name|truncatechars:10 }} {{ u.last_name|truncatechars:10 }}</a>
+						<a class="user-link nav-link" href="{{ u.profile.get_absolute_url }}">{{ u }}</a>
 					</div>
 					<div class="col d-flex justify-content-end pt-3">
-							<a href="{% url 'chat:messages' u.chat.first.pk %}" class="nav-link text-white" style="width:20px;height: 20px;">
+							<a href="{% url 'chat:messages' u.pk %}" class="nav-link text-white" style="width:20px;height: 20px;">
 								<i class="fs-5 fa fa-message d-flex justify-content-center" style="color: #1a1a1a"></i>
 							</a>
 					</div>

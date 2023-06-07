@@ -30,10 +30,6 @@ def create_chat() -> models.Chat:
     return models.Chat.objects.create()
 
 
-def get_user_chat(request_user: User) -> List[User]:
+def get_chat(request_user: User) -> List[User]:
     qs = models.Chat.objects.filter(members__in=[request_user])
-    try:
-        qs2 = [m.members.get(~Q(pk=request_user.pk)) for m in qs]
-    except:
-        return []
-    return qs2
+    return qs
