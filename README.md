@@ -3,7 +3,7 @@
 База данных: PostgreSQL 15.3
 
 
-Устанвока:
+Установка:
 1. Заменить значения переменных окружения (environment) на свои в social_network/social_network/settings.py, docker-compose.yml;
 2. Выполнить в консоли docker-compose up --build или для работы в фоновом режиме docker-compose up -d --build;
 3. Перейти на http://localhost:8000/.
