@@ -1,0 +1,10 @@
+.git
+.idea
+.cache
+
+/social_network/media
+
+/social_network/core/static/core/fontawesome-free-6.2.1-web/svgs/brands
+/social_network/core/static/core/fontawesome-free-6.2.1-web/svgs/regular
+/social_network/core/static/core/fontawesome-free-6.2.1-web/svgs/solid2
+/social_network/core/static/core/fontawesome-free-6.2.1-web/css2
